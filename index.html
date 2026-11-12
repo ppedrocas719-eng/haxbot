@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="pt-BR"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Hax Studio For Discord Bots</title>
+<style>
+:root{--bg:#fdf7ff;--sf:#f7f0fa;--pr:#65558f;--pc:#e9ddff;--tx:#1d1b20;--mu:#6b6573;--ol:#7a757f;--er:#b3261e;color-scheme:light}
+@media(prefers-color-scheme:dark){:root{--bg:#141218;--sf:#211f26;--pr:#cfbcff;--pc:#4f378b;--tx:#e6e0e9;--mu:#aaa3b2;--ol:#938f99;--er:#f2b8b5;color-scheme:dark}}
+*{box-sizing:border-box}html,body{height:100%;margin:0}
+body{background:var(--bg);color:var(--tx);font:16px Roboto,system-ui,sans-serif}
+#app{display:flex;flex-direction:column;height:100%;padding-top:env(safe-area-inset-top,0)}
+header{padding:14px 20px;font-size:22px;display:flex;align-items:center;gap:10px}
+main{flex:1;overflow:auto;padding:0 16px 16px}
+nav{display:flex;background:var(--sf);padding:8px 4px calc(8px + env(safe-area-inset-bottom,0))}
+nav button{flex:1;background:none;border:0;color:var(--tx);font:12px inherit;display:flex;flex-direction:column;align-items:center;gap:4px;padding:0}
+nav button i{padding:4px 20px;border-radius:16px;display:flex}
+nav button.on i{background:var(--pc)}nav button.on{font-weight:700}
+.card{background:var(--sf);border-radius:16px;padding:16px;margin-bottom:12px}
+.hero{background:var(--pc);border-radius:24px;padding:20px;margin-bottom:12px}
+h2,h3{margin:0 0 8px;font-weight:500}
+input,select{width:100%;padding:14px;margin:6px 0;border:1px solid var(--ol);border-radius:8px;background:transparent;color:var(--tx);font:inherit}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;background:var(--pr);color:var(--bg);border:0;border-radius:20px;padding:12px 20px;font:600 15px inherit;cursor:pointer}
+.btn.w{width:100%}.btn.t{background:var(--pc);color:var(--tx)}.btn.e{background:transparent;color:var(--er);border:1px solid var(--er)}
+.row{display:flex;gap:8px;align-items:center}.sp{flex:1}
+.chip{padding:8px 14px;border:1px solid var(--ol);border-radius:8px;background:none;color:var(--tx);white-space:nowrap;font:inherit}
+.chip.on{background:var(--pc);border-color:var(--pc)}
+.tabs{display:flex;gap:8px;overflow-x:auto;margin-bottom:8px}
+.st{font-size:12px;padding:2px 10px;border-radius:8px;background:var(--pc)}
+textarea{width:100%;height:50vh;background:var(--sf);color:var(--tx);border:1px solid var(--ol);border-radius:12px;padding:12px;font:14px/1.5 monospace;tab-size:2;white-space:pre;overflow:auto;resize:none}
+pre{background:var(--sf);padding:10px;border-radius:8px;overflow-x:auto;font-size:13px;margin:6px 0}
+.mu{color:var(--mu);font-size:14px}.err{color:var(--er);min-height:20px}
+#auth{margin:auto;max-width:420px;width:100%;padding:20px}
+#toast{position:fixed;left:16px;right:16px;bottom:90px;background:#322f35;color:#fff;padding:14px;border-radius:8px;display:none}
+</style></head><body>
+<div id="app"></div><div id="toast"></div>
+<script>
+const P={home:"M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z",code:"M9.4 16.6 4.8 12l4.6-4.6L8 6l-6 6 6 6zm5.2 0 4.6-4.6-4.6-4.6L16 6l6 6-6 6z",set:"M3 17v2h6v-2zM3 5v2h10V5zm10 16v-2h8v-2h-8v-2h-2v6zM7 9v2H3v2h4v2h2V9zm14 4v-2H11v2zm-6-4h2V7h4V5h-4V3h-2z",book:"M18 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2zM6 4h5v8l-2.5-1.5L6 12z",play:"M8 5v14l11-7z",stop:"M6 6h12v12H6z",add:"M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6z",del:"M6 19a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V7H6zM19 4h-3.5l-1-1h-5l-1 1H5v2h14z",save:"M17 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V7zm-5 16a3 3 0 1 1 0-6 3 3 0 0 1 0 6zm3-10H5V5h10z",out:"M17 7l-1.4 1.4L18.2 11H8v2h10.2l-2.6 2.6L17 17l5-5zM4 5h8V3H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h8v-2H4z",bot:"M20 9V7a2 2 0 0 0-2-2h-3a3 3 0 0 0-6 0H6a2 2 0 0 0-2 2v2a2 2 0 0 0-2 2v4a2 2 0 0 0 2 2v1a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-1a2 2 0 0 0 2-2v-4a2 2 0 0 0-2-2zM9 12a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3zm6 0a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3z"};
+const ic=(n,s=22)=>`<svg viewBox="0 0 24 24" width="${s}" height="${s}" fill="currentColor"><path d="${P[n]}"/></svg>`;
+const $=s=>document.querySelector(s),esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+let S={tk:localStorage.tk||'',bots:[],cur:null,ci:0,tab:'bots',reg:false,err:''};
+const toast=t=>{const e=$('#toast');e.textContent=t;e.style.display='block';setTimeout(()=>e.style.display='none',3500)};
+async function api(m,p,b){const r=await fetch('/api'+p,{method:m,headers:{'content-type':'application/json','x-auth':S.tk},body:b&&JSON.stringify(b)});const j=await r.json().catch(()=>({}));if(r.status==401){S.tk='';localStorage.tk='';render()}if(!r.ok)throw new Error(j.error||'Erro');return j}
+const bot=()=>S.bots.find(b=>b.id==S.cur)||S.bots[0];
+async function load(){try{S.bots=await api('GET','/bots');if(!bot())S.cur=null;else S.cur=bot().id;render()}catch(e){toast(e.message)}}
+async function auth(){const n=$('#n').value,p=$('#p').value;if(S.reg&&p!=$('#p2').value){S.err='As senhas nao conferem';return render()}
+ try{const j=await api('POST',S.reg?'/register':'/login',{name:n,pass:p});S.tk=j.tk;localStorage.tk=j.tk;S.err='';await load()}catch(e){S.err=e.message;render()}}
+function render(){const a=$('#app');
+ if(!S.tk){a.innerHTML=`<div id="auth"><div class="card"><h2 style="text-align:center;font-size:26px;display:flex;justify-content:center;gap:8px;align-items:center">${ic('bot',30)} Hax Studio</h2><p class="mu" style="text-align:center">For Discord Bots - ${S.reg?'crie sua conta (sem email)':'entre na sua conta'}</p>
+ <input id="n" placeholder="Nome de usuario" autocapitalize="off"><input id="p" type="password" placeholder="Senha">${S.reg?'<input id="p2" type="password" placeholder="Confirmar senha">':''}
+ <div class="err">${esc(S.err)}</div><button class="btn w" onclick="auth()">${S.reg?'Criar conta':'Entrar'}</button>
+ <p style="text-align:center"><button class="chip" style="border:0;color:var(--pr)" onclick="S.reg=!S.reg;S.err='';render()">${S.reg?'Ja tenho conta':'Criar conta'}</button></p></div></div>`;return}
+ const b=bot(),T=[['bots','home','Meus Bots'],['edit','code','Editor'],['cfg','set','Config'],['api','book','API']];
+ let h='';
+ if(S.tab=='bots')h=`<div class="hero"><h2>Meus bots</h2><p class="mu">Ligue e desligue seus bots de Discord. Ligado, ele roda 24/7 no servidor.</p></div>
+ <div class="card row"><input id="nb" placeholder="Nome do novo bot" style="margin:0"><button class="btn" onclick="newBot()">${ic('add')}</button></div>`+
+ S.bots.map(x=>`<div class="card"><div class="row"><div class="sp"><h3>${esc(x.name)}</h3><span class="st">${x.on?'Online':'Offline'}</span> <span class="mu">prefixo ${esc(x.prefix)}</span></div>
+ <button class="btn t" onclick="S.cur='${x.id}';S.ci=0;S.tab='edit';render()">${ic('code')}</button>
+ <button class="btn ${x.on?'e':''}" onclick="tog('${x.id}',${x.on})">${ic(x.on?'stop':'play')}${x.on?'Desligar':'Ligar'}</button></div></div>`).join('');
+ else if(!b)h='<div class="card">Crie um bot primeiro na aba Meus Bots.</div>';
+ else if(S.tab=='edit'){const c=b.cmds[S.ci]||(S.ci=0,b.cmds[0]);
+  h=`<div class="tabs">${b.cmds.map((x,i)=>`<button class="chip ${i==S.ci?'on':''}" onclick="S.ci=${i};render()">${esc(x.name)}</button>`).join('')}<button class="chip" onclick="addCmd()">${ic('add',18)}</button></div>
+  ${c?`<textarea id="ed" spellcheck="false" autocapitalize="off" autocorrect="off">${esc(c.code)}</textarea>
+  <div class="row" style="margin-top:10px"><button class="btn sp" onclick="saveBot()">${ic('save')} Salvar</button><button class="btn e" onclick="delCmd()">${ic('del')}</button></div>`:'<div class="card">Sem comandos.</div>'}
+  <p class="mu">Comando: <b>${esc(b.prefix)}${esc(c?c.name:'')}</b> no Discord. Tab = 2 espacos.</p>`}
+ else if(S.tab=='cfg')h=`<div class="card"><h3>${esc(b.name)}</h3><input id="cn" value="${esc(b.name)}" placeholder="Nome do bot"><input id="ct" type="password" placeholder="${b.hasToken?'Token salvo (digite para trocar)':'Token do bot'}"><input id="cp" value="${esc(b.prefix)}" maxlength="3" placeholder="Prefixo">
+  <p class="mu">Ative a Message Content Intent no Developer Portal do Discord. Se mudar o token, desligue e ligue o bot.</p>
+  <button class="btn w" onclick="saveBot(1)">${ic('save')} Salvar</button></div>
+  <div class="card"><button class="btn e w" onclick="delBot()">${ic('del')} Excluir bot</button></div>
+  <button class="btn t w" onclick="S.tk='';localStorage.tk='';render()">${ic('out')} Sair da conta</button>`;
+ else h=docs();
+ a.innerHTML=`<header>${ic('bot',26)} Hax Studio</header><main>${h}</main><nav>${T.map(t=>`<button class="${S.tab==t[0]?'on':''}" onclick="S.tab='${t[0]}';render()"><i>${ic(t[1])}</i>${t[2]}</button>`).join('')}</nav>`;
+ const ed=$('#ed');if(ed){ed.oninput=()=>b.cmds[S.ci].code=ed.value;ed.onkeydown=key}}
+function docs(){const c=(t)=>`<pre>${esc(t)}</pre>`;return `<div class="hero"><h2>HSS# (Hax Syntax Standard-Sharp)</h2><p class="mu">Referencia rapida da linguagem.</p></div>
+<div class="card"><h3>bot.Reply(...)</h3><p class="mu">Faz o bot falar. Textos com aspas duplas, junte com ..</p>${c('bot.Reply("Oi, " .. username .. " idade: " .. 18)')}
+<h3>username</h3><p class="mu">Nome de quem executou o comando. Use dentro do bot.Reply().</p>
+<h3>userVar.Add(Nome, Valor) / userVar.Get(Nome)</h3><p class="mu">Variavel do usuario. Get retorna nil se nao existir.</p>${c('userVar.Add(Coins, 500)')}
+<h3>cond( ... )</h3><p class="mu">if obrigatorio; elseif, else e end opcionais.</p>${c('cond(\n  if userVar.Get(Coins) >= 500 then\n    bot.Reply("Moedas suficientes!")\n  else\n    bot.Reply("Moedas insuficientes")\n  end)')}
+<h3>Matematica e comparacao</h3><p class="mu">&lt;= &gt;= &gt; &lt; == (igual) = (definir) + - * /</p>
+<h3>randomNumber(min, max) / randomText(a, b, c)</h3>${c('bot.Reply(randomNumber(2, 600))\nbot.Reply(randomText(oi, sla, abuh))')}
+<h3>Booleanos e logica</h3><p class="mu">true, false, and, or, not, nil</p></div>`}
+async function newBot(){try{const n=$('#nb').value||'Meu bot';const b=await api('POST','/bots',{name:n});S.bots.push(b);S.cur=b.id;render()}catch(e){toast(e.message)}}
+async function tog(id,on){try{const r=await api('POST',`/bots/${id}/${on?'stop':'start'}`);Object.assign(S.bots.find(x=>x.id==id),r);render()}catch(e){toast(e.message)}}
+async function saveBot(cfg){const b=bot(),d={cmds:b.cmds};if(cfg)Object.assign(d,{name:$('#cn').value,token:$('#ct').value,prefix:$('#cp').value});
+ try{Object.assign(b,await api('PUT','/bots/'+b.id,d));toast('Salvo');render()}catch(e){toast(e.message)}}
+async function delBot(){if(!confirm('Excluir este bot?'))return;try{await api('DELETE','/bots/'+bot().id);S.tab='bots';await load()}catch(e){toast(e.message)}}
+function addCmd(){const n=(prompt('Nome do comando (sem prefixo)')||'').trim().replace(/\s+/g,'');if(!n)return;const b=bot();b.cmds.push({name:n,code:'bot.Reply("Ola, " .. username)'});S.ci=b.cmds.length-1;render()}
+function delCmd(){if(!confirm('Excluir comando?'))return;const b=bot();b.cmds.splice(S.ci,1);S.ci=0;render()}
+function key(e){const t=e.target,s=t.selectionStart,v=t.value;
+ const set=(val,pos)=>{t.value=val;t.selectionStart=t.selectionEnd=pos;t.oninput()};
+ if(e.key=='Tab'){e.preventDefault();set(v.slice(0,s)+'  '+v.slice(t.selectionEnd),s+2)}
+ if(e.key=='Enter'){e.preventDefault();const ls=v.lastIndexOf('\n',s-1)+1;let line=v.slice(ls,s),tr=line.trim(),n=line.match(/^ */)[0].length,pre=v.slice(0,ls);
+  if(/^(end|else)/.test(tr)&&n>=2){line=line.slice(2);n-=2;if(/^else/.test(tr))n+=2}
+  if(/(\bthen|\belse|cond\()$/.test(tr))n+=2;
+  const ins=line+'\n'+' '.repeat(n);set(pre+ins+v.slice(s),pre.length+ins.length)}}
+if(S.tk)load();else render();
+</script></body></html>
