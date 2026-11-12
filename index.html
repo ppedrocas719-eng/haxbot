@@ -33,24 +33,101 @@ pre{background:var(--sf);padding:10px;border-radius:8px;overflow-x:auto;font-siz
 </style></head><body>
 <div id="app"></div><div id="toast"></div>
 <script>
-const P={home:"M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z",code:"M9.4 16.6 4.8 12l4.6-4.6L8 6l-6 6 6 6zm5.2 0 4.6-4.6-4.6-4.6L16 6l6 6-6 6z",set:"M3 17v2h6v-2zM3 5v2h10V5zm10 16v-2h8v-2h-8v-2h-2v6zM7 9v2H3v2h4v2h2V9zm14 4v-2H11v2zm-6-4h2V7h4V5h-4V3h-2z",book:"M18 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2zM6 4h5v8l-2.5-1.5L6 12z",play:"M8 5v14l11-7z",stop:"M6 6h12v12H6z",add:"M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6z",del:"M6 19a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V7H6zM19 4h-3.5l-1-1h-5l-1 1H5v2h14z",save:"M17 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V7zm-5 16a3 3 0 1 1 0-6 3 3 0 0 1 0 6zm3-10H5V5h10z",out:"M17 7l-1.4 1.4L18.2 11H8v2h10.2l-2.6 2.6L17 17l5-5zM4 5h8V3H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h8v-2H4z",bot:"M20 9V7a2 2 0 0 0-2-2h-3a3 3 0 0 0-6 0H6a2 2 0 0 0-2 2v2a2 2 0 0 0-2 2v4a2 2 0 0 0 2 2v1a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-1a2 2 0 0 0 2-2v-4a2 2 0 0 0-2-2zM9 12a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3zm6 0a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3z"};
+const P={eye:"M12 4.5C7 4.5 2.7 7.6 1 12c1.7 4.4 6 7.5 11 7.5s9.3-3.1 11-7.5c-1.7-4.4-6-7.5-11-7.5zM12 17a5 5 0 1 1 0-10 5 5 0 0 1 0 10zm0-8a3 3 0 1 0 0 6 3 3 0 0 0 0-6z",home:"M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z",code:"M9.4 16.6 4.8 12l4.6-4.6L8 6l-6 6 6 6zm5.2 0 4.6-4.6-4.6-4.6L16 6l6 6-6 6z",set:"M3 17v2h6v-2zM3 5v2h10V5zm10 16v-2h8v-2h-8v-2h-2v6zM7 9v2H3v2h4v2h2V9zm14 4v-2H11v2zm-6-4h2V7h4V5h-4V3h-2z",book:"M18 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2zM6 4h5v8l-2.5-1.5L6 12z",play:"M8 5v14l11-7z",stop:"M6 6h12v12H6z",add:"M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6z",del:"M6 19a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V7H6zM19 4h-3.5l-1-1h-5l-1 1H5v2h14z",save:"M17 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V7zm-5 16a3 3 0 1 1 0-6 3 3 0 0 1 0 6zm3-10H5V5h10z",out:"M17 7l-1.4 1.4L18.2 11H8v2h10.2l-2.6 2.6L17 17l5-5zM4 5h8V3H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h8v-2H4z",bot:"M20 9V7a2 2 0 0 0-2-2h-3a3 3 0 0 0-6 0H6a2 2 0 0 0-2 2v2a2 2 0 0 0-2 2v4a2 2 0 0 0 2 2v1a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-1a2 2 0 0 0 2-2v-4a2 2 0 0 0-2-2zM9 12a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3zm6 0a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3z"};
 const ic=(n,s=22)=>`<svg viewBox="0 0 24 24" width="${s}" height="${s}" fill="currentColor"><path d="${P[n]}"/></svg>`;
 const $=s=>document.querySelector(s),esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 let S={tk:localStorage.tk||'',bots:[],cur:null,ci:0,tab:'bots',reg:false,err:''};
 const toast=t=>{const e=$('#toast');e.textContent=t;e.style.display='block';setTimeout(()=>e.style.display='none',3500)};
-async function api(m,p,b){const r=await fetch('/api'+p,{method:m,headers:{'content-type':'application/json','x-auth':S.tk},body:b&&JSON.stringify(b)});const j=await r.json().catch(()=>({}));if(r.status==401){S.tk='';localStorage.tk='';render()}if(!r.ok)throw new Error(j.error||'Erro');return j}
+let D=JSON.parse(localStorage.hdb||'{"users":{}}');const dsave=()=>localStorage.hdb=JSON.stringify(D);
+const live={};
+async function hsh(s){try{const h=await crypto.subtle.digest('SHA-256',new TextEncoder().encode('hax:'+s));return[...new Uint8Array(h)].map(x=>x.toString(16).padStart(2,'0')).join('')}catch{let h=5381;for(const c of 'hax:'+s)h=(h*33^c.charCodeAt(0))>>>0;return'x'+h}}
+/* ---- HSS# -> JS ---- */
+const BAD=/\b(constructor|prototype|__proto__|process|require|global|globalThis|window|document|this|eval|Function|import|while|for|async|await|setTimeout|setInterval|fetch|localStorage)\b|[\[\]`]/;
+function tr(src){
+ let js=src.split(/("(?:[^"\\\n]|\\.)*")/).map((p,i)=>i%2?p:p
+  .replace(/\.\./g,'+').replace(/~=/g,'!=')
+  .replace(/\belseif\b(.*?)\bthen\b/g,'} else if ($1) {')
+  .replace(/\bif\b(.*?)\bthen\b/g,'if ($1) {')
+  .replace(/\belse\b/g,'} else {').replace(/\bend\b/g,'}')
+  .replace(/\bnil\b/g,'null').replace(/\band\b/g,'&&').replace(/\bor\b/g,'||')
+  .replace(/\bnot\b/g,'!').replace(/\blocal\b/g,'')).join('');
+ let out='',st=[],q=false;
+ for(let i=0;i<js.length;i++){const c=js[i];
+  if(c=='"'){q=!q;out+=c;continue}
+  if(q){if(c=='\\')out+=c+js[++i];else out+=c;continue}
+  if(js.startsWith('cond(',i)&&!/\w/.test(js[i-1]||' ')){st.push(true);i+=4;continue}
+  if(c=='(')st.push(false);
+  if(c==')'){if(st.pop())continue}
+  out+=c}
+ return out}
+function run(code,ctx){const out=[];
+ try{if(BAD.test(code))throw new Error('Blocked syntax');
+  const uv=ctx.vars[ctx.uid]=ctx.vars[ctx.uid]||{};
+  const env={username:ctx.username,
+   userVar:{Add:(n,v)=>{uv[n]=v},Get:n=>uv[n]===undefined?null:uv[n]},
+   bot:{Reply:(...a)=>{out.push(a.join(''))}},
+   randomNumber:(a,b)=>Math.floor(Math.random()*(b-a+1))+Number(a),
+   randomText:(...a)=>a[Math.floor(Math.random()*a.length)]};
+  const p=new Proxy(env,{has:()=>true,get:(t,k)=>k===Symbol.unscopables?undefined:k in t?t[k]:String(k),set:(t,k,v)=>(t[k]=v,true)});
+  new Function('p','with(p){'+tr(code)+'\n}')(p)
+ }catch(e){out.push('Error: '+e.message)}
+ return out}
+/* ---- Discord Gateway direto do navegador ---- */
+async function onMsg(b,m){
+ if(m.author.bot||!m.content.startsWith(b.prefix))return;
+ const n=m.content.slice(b.prefix.length).trim().split(/\s+/)[0].toLowerCase(),c=b.cmds.find(x=>x.name.toLowerCase()==n);
+ if(!c)return;
+ const o=run(c.code,{uid:m.author.id,username:m.author.username,vars:b.vars});dsave();
+ for(const t of o)if(t)await fetch(`https://discord.com/api/v10/channels/${m.channel_id}/messages`,{method:'POST',headers:{'content-type':'application/json',Authorization:'Bot '+b.token},body:JSON.stringify({content:t.slice(0,2000),message_reference:{message_id:m.id}})}).catch(()=>{})}
+function gw(b){return new Promise((res,rej)=>{
+ const ws=new WebSocket('wss://gateway.discord.gg/?v=10&encoding=json');let hb,seq=null,ok=false;
+ ws.onmessage=e=>{const m=JSON.parse(e.data);if(m.s)seq=m.s;
+  if(m.op==10){hb=setInterval(()=>ws.send(JSON.stringify({op:1,d:seq})),m.d.heartbeat_interval);
+   ws.send(JSON.stringify({op:2,d:{token:b.token,intents:33281,properties:{os:'web',browser:'hax',device:'hax'}}}))}
+  if(m.t=='READY'){ok=true;res(ws)}
+  if(m.t=='MESSAGE_CREATE')onMsg(b,m.d)};
+ ws.onclose=e=>{clearInterval(hb);
+  if(!ok)return rej(new Error(e.code==4004?'Token invalido':e.code==4014?'Ative a Message Content Intent no Portal do Discord':'Nao conectou ao Discord ('+e.code+')'));
+  if(live[b.id]===ws)setTimeout(()=>{if(live[b.id]===ws)gw(b).then(w=>{live[b.id]=w}).catch(()=>{})},4000)};
+ ws.onerror=()=>{}})}
+async function stopB(id){const w=live[id];delete live[id];if(w)w.close()}
+async function startB(b){await stopB(b.id);if(!b.token)throw new Error('Defina o token do bot primeiro (aba Config)');live[b.id]=await gw(b);b.on=true;dsave()}
+/* ---- "API" local (guarda tudo no aparelho) ---- */
+async function api(m,p,d={}){
+ if(p=='/register'||p=='/login'){const n=String(d.name||'').trim().toLowerCase(),pw=String(d.pass||'');
+  if(!/^[a-z0-9_]{3,20}$/.test(n)||pw.length<6)throw new Error('Nome: 3 a 20 caracteres, so letras sem acento, numeros e _ (sem espaco). Senha: minimo 6 caracteres');
+  const h=await hsh(pw);
+  if(p=='/register'){if(D.users[n])throw new Error('Nome ja existe');D.users[n]={hash:h,bots:[]}}
+  else if(!D.users[n]||D.users[n].hash!=h)throw new Error('Nome ou senha incorretos');
+  dsave();return{tk:n}}
+ const u=D.users[S.tk];if(!u){S.tk='';localStorage.tk='';render();throw new Error('Sessao expirada')}
+ const mm=p.match(/^\/bots(?:\/(\w+))?(?:\/(start|stop))?$/),b=u.bots.find(x=>x.id==mm[1]);
+ const pub=x=>({id:x.id,name:x.name,prefix:x.prefix,cmds:x.cmds,on:!!live[x.id],hasToken:!!x.token});
+ if(!mm[1]){if(m=='GET')return u.bots.map(pub);
+  const nb={id:Math.random().toString(36).slice(2,10),name:String(d.name||'Meu bot').slice(0,30),token:'',prefix:'!',on:false,vars:{},cmds:[{name:'ping',code:'bot.Reply("Pong, " .. username .. "!")'}]};
+  u.bots.push(nb);dsave();return pub(nb)}
+ if(!b)throw new Error('Bot nao encontrado');
+ if(mm[2]=='start'){try{await startB(b)}catch(e){b.on=false;throw e}return pub(b)}
+ if(mm[2]=='stop'){await stopB(b.id);b.on=false;dsave();return pub(b)}
+ if(m=='DELETE'){await stopB(b.id);u.bots=u.bots.filter(x=>x!==b);dsave();return{}}
+ if(d.name)b.name=String(d.name).slice(0,30);
+ if(d.prefix)b.prefix=String(d.prefix).slice(0,3);
+ if(d.token)b.token=String(d.token).trim();
+ if(Array.isArray(d.cmds))b.cmds=d.cmds.map(c=>({name:String(c.name).slice(0,30),code:String(c.code)}));
+ dsave();return pub(b)}
+const pw=(id,ph)=>`<div style="position:relative"><input id="${id}" type="password" placeholder="${ph}" style="padding-right:48px"><button type="button" onclick="const i=$('#${id}');i.type=i.type=='password'?'text':'password'" style="position:absolute;right:6px;top:50%;transform:translateY(-50%);background:none;border:0;color:var(--mu);display:flex;padding:8px">${ic('eye')}</button></div>`;
 const bot=()=>S.bots.find(b=>b.id==S.cur)||S.bots[0];
 async function load(){try{S.bots=await api('GET','/bots');if(!bot())S.cur=null;else S.cur=bot().id;render()}catch(e){toast(e.message)}}
-async function auth(){const n=$('#n').value,p=$('#p').value;if(S.reg&&p!=$('#p2').value){S.err='As senhas nao conferem';return render()}
+async function auth(){const n=$('#n').value.trim(),p=$('#p').value;S.n=n;if(S.reg&&p!=$('#p2').value){S.err='As senhas nao conferem';return render()}
  try{const j=await api('POST',S.reg?'/register':'/login',{name:n,pass:p});S.tk=j.tk;localStorage.tk=j.tk;S.err='';await load()}catch(e){S.err=e.message;render()}}
 function render(){const a=$('#app');
  if(!S.tk){a.innerHTML=`<div id="auth"><div class="card"><h2 style="text-align:center;font-size:26px;display:flex;justify-content:center;gap:8px;align-items:center">${ic('bot',30)} Hax Studio</h2><p class="mu" style="text-align:center">For Discord Bots - ${S.reg?'crie sua conta (sem email)':'entre na sua conta'}</p>
- <input id="n" placeholder="Nome de usuario" autocapitalize="off"><input id="p" type="password" placeholder="Senha">${S.reg?'<input id="p2" type="password" placeholder="Confirmar senha">':''}
+ <input id="n" placeholder="Nome de usuario (sem espaco)" autocapitalize="off" value="${esc(S.n||'')}">${pw('p','Senha (minimo 6)')}${S.reg?pw('p2','Confirmar senha'):''}
  <div class="err">${esc(S.err)}</div><button class="btn w" onclick="auth()">${S.reg?'Criar conta':'Entrar'}</button>
  <p style="text-align:center"><button class="chip" style="border:0;color:var(--pr)" onclick="S.reg=!S.reg;S.err='';render()">${S.reg?'Ja tenho conta':'Criar conta'}</button></p></div></div>`;return}
  const b=bot(),T=[['bots','home','Meus Bots'],['edit','code','Editor'],['cfg','set','Config'],['api','book','API']];
  let h='';
- if(S.tab=='bots')h=`<div class="hero"><h2>Meus bots</h2><p class="mu">Ligue e desligue seus bots de Discord. Ligado, ele roda 24/7 no servidor.</p></div>
+ if(S.tab=='bots')h=`<div class="hero"><h2>Meus bots</h2><p class="mu">Ligue e desligue seus bots. Eles funcionam enquanto este site estiver aberto no navegador.</p></div>
  <div class="card row"><input id="nb" placeholder="Nome do novo bot" style="margin:0"><button class="btn" onclick="newBot()">${ic('add')}</button></div>`+
  S.bots.map(x=>`<div class="card"><div class="row"><div class="sp"><h3>${esc(x.name)}</h3><span class="st">${x.on?'Online':'Offline'}</span> <span class="mu">prefixo ${esc(x.prefix)}</span></div>
  <button class="btn t" onclick="S.cur='${x.id}';S.ci=0;S.tab='edit';render()">${ic('code')}</button>
@@ -91,5 +168,6 @@ function key(e){const t=e.target,s=t.selectionStart,v=t.value;
   if(/^(end|else)/.test(tr)&&n>=2){line=line.slice(2);n-=2;if(/^else/.test(tr))n+=2}
   if(/(\bthen|\belse|cond\()$/.test(tr))n+=2;
   const ins=line+'\n'+' '.repeat(n);set(pre+ins+v.slice(s),pre.length+ins.length)}}
+Object.values(D.users).forEach(u=>u.bots.filter(b=>b.on).forEach(b=>startB(b).catch(()=>{b.on=false})));
 if(S.tk)load();else render();
 </script></body></html>
